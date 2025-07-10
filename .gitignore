@@ -1,0 +1,35 @@
+# Виртуальные окружения Python
+.venv/
+venv/
+ENV/
+env/
+
+# Кэш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.idea/
+.vscode/
+
+# Логи
+logs/
+*.log
+
+# Временные файлы
+.cache/
+*.tmp
+
+# Моды, профили и overwrite
+mods/
+overwrite/
+profiles/
+
+# Архивы и скачанные файлы
+*.zip
+
+# Конфиденциальные файлы
+config.local.json
+secrets.json
