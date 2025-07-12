@@ -1,35 +1,22 @@
-# Виртуальные окружения Python
-.venv/
-venv/
-ENV/
-env/
+# Моды и профили MO2
+launcher/mods
+launcher/profiles
+launcher/overwrite
 
-# Кэш Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# Временные файлы лаунчера
+launcher/Asto's Modpack Installer/.cashe/
+launcher/Asto's Modpack Installer/logs
 
-# IDE
+# Виртуальные окружения
+**/.venv/
+**/venv/
+**/__pycache__/
+**/*.pyc
+
+# IDE (PyCharm, VSCode)
 .idea/
 .vscode/
 
-# Логи
-logs/
-*.log
-
-# Временные файлы
-.cache/
-*.tmp
-
-# Моды, профили и overwrite
-mods/
-overwrite/
-profiles/
-
-# Архивы и скачанные файлы
+# Архивы
 *.zip
-
-# Конфиденциальные файлы
-config.local.json
-secrets.json
+*.7z
