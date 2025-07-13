@@ -17,28 +17,34 @@
 Проект состоит из основного установщика и папок Mod Organizer 2.
 
 ```commandline
-Asto's Stardew Valley Modpack
-├── Asto's Modpack Installer/
-│ ├── main.py                       # Главный исполняемый файл (точка входа лаунчера)
+Stardew Valley
+├── launcher
+│ ├── Asto's Modpack Installer/
+│ ├── main.py                       # Точка входа
 │ ├── config.json                   # Общий конфиг (пути, GitHub URL)
 │ ├── modlists/                     # Сборки модов
-│ │ ├── minimal_qol.json
-│ │ └── farming_expanded.json
-│ ├── templates/
-│ │ └── meta.ini                    # Шаблон для генерации meta.ini
+│ │ └── example_modpack.json        # Список модов к загрузке
 │ ├── utils/
 │ │ ├── downloader.py               # Функции скачивания файлов
 │ │ ├── installer.py                # Установка модов, создание meta.ini
-│ │ ├── config_sync.py              # Загрузка конфигов с GitHub
 │ │ └── logger.py                   # Ведение логов
+│ │
 │ ├── .cache/                       # Временные файлы
 │ │ ├── downloads/                  # Скачанные архивы модов
 │ │ └── github_config/              # Распакованные конфиги с GitHub
-│ └── logs/
-│ └── install_2025-04-29.txt        # Логи установки (с указанием даты)
-├── mods/                           # Моды (Mod Organizer 2)
-├── overwrite/                      # Папка overwrite (Mod Organizer 2)
-└── profiles/                       # Профили MO2
+│ ├── logs/
+│ │ └── install_YYYY-MM-DD.txt      # Логи установки (с указанием даты)
+│ │
+│ ├── mods/                         # Моды (Mod Organizer 2)
+│ ├── overwrite/                    # Папка overwrite (Mod Organizer 2)
+│ └── profiles/                     # Профили (Mod Organizer 2)
+│ 
+├── modpacks
+│ ├── example/
+│ │ ├── overwrite                   # Функции скачивания файлов
+│ │ ├── profiles                    # Профили (Mod Organizer 2)
+│ │ ├── example_modpack.json        # Список модов к загрузке
+
 ```
 
 ## TODO
