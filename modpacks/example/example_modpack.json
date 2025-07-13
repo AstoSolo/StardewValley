@@ -1,14 +1,18 @@
-[
-  {
-    "name": "StardewValleyExpanded",
-    "url": "https://stardewmods.ru/uploads/public_files/2025-07/stardewvalleyexpanded.7z"
-  },
-  {
-    "name": "ContentPatcher",
-    "url": "https://stardewmods.ru/uploads/public_files/2025-07/contentpatcher.zip"
-  },
-  {
-    "name": "FarmTypeManager",
-    "url": "https://stardewmods.ru/uploads/public_files/2025-01/ftm-1-24-0.zip"
-  }
-]
+{
+  "name": "exampleModpack",
+  "github_zip_url": "https://github.com/<user>/<repo>/releases/download/v1.0.0/expanded-pack.zip",
+  "mods": [
+    {
+      "name": "ContentPatcher",
+      "url": "https://stardewmods.ru/uploads/public_files/2025-07/contentpatcher.zip"
+    },
+    {
+      "name": "FarmTypeManager",
+      "url": "https://stardewmods.ru/uploads/public_files/2025-01/ftm-1-24-0.zip"
+    },
+    {
+      "name": "Generic Mod Config Menu",
+      "url": "https://stardewmods.ru/uploads/public_files/2025-07/gmcm.zip"
+    }
+  ]
+}

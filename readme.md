@@ -43,7 +43,7 @@ Stardew Valley
 │ ├── example/
 │ │ ├── overwrite                   # Функции скачивания файлов
 │ │ ├── profiles                    # Профили (Mod Organizer 2)
-│ │ ├── example_modpack.json        # Список модов к загрузке
+│ │ └── example_modpack.json        # Список модов к загрузке
 
 ```
 
