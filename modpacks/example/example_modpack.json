@@ -1,6 +1,6 @@
 {
   "name": "exampleModpack",
-  "github_zip_url": "https://github.com/<user>/<repo>/releases/download/v1.0.0/expanded-pack.zip",
+  "github_zip_url": "https://github.com/AstoSolo/StardewValleyOld/releases/download/test/example_modpack.zip",
   "mods": [
     {
       "name": "ContentPatcher",

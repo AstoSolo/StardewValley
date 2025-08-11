@@ -3,7 +3,7 @@
     {
       "name": "ExampleModpack",
       "slug": "example_modpack",
-      "modlist_url": "https://raw.githubusercontent.com/<user>/<repo>/main/modpacks/example/example_modpack.json"
+      "modlist_url": "https://raw.githubusercontent.com/AstoSolo/StardewValleyOld/main/modpacks/example/example_modpack.json"
     }
   ]
 }
