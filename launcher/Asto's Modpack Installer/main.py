@@ -9,13 +9,13 @@ def load_config():
         with open(config_path, "r", encoding="utf-8") as file:
             return json.load(file)
     except Exception as e:
-        logger.log(f"Ошибка при чтении конфигурации: {e}")
+        logger.error(f"Ошибка при чтении конфигурации: {e}")
         exit(1)
 
 def select_modpack(modpacks):
     """Позволяет пользователю выбрать модпак из списка"""
     if not modpacks:
-        logger.log("Нет доступных модпаков в конфигурации.")
+        logger.error("Нет доступных модпаков в конфигурации.")
         exit(1)
     
     print("\nДоступные модпаки:")
@@ -64,68 +64,86 @@ def download_modlist(modpack):
     """Скачивает модлист для выбранного модпака"""
     modlist_url = modpack.get("modlist_url")
     if not modlist_url:
-        logger.log(f"URL модлиста не указан для модпака: {modpack['name']}")
+        logger.error(f"URL модлиста не указан для модпака: {modpack['name']}")
         exit(1)
     
     modlist_path = DOWNLOADS_DIR / f"{modpack['slug']}_modlist.json"
     
-    logger.log(f"Скачиваю модлист для {modpack['name']}...")
+    logger.info(f"Скачиваю модлист для {modpack['name']}...")
     try:
         downloader.download_file(modlist_url, modlist_path)
         with open(modlist_path, "r", encoding="utf-8") as file:
             return json.load(file)
     except Exception as e:
-        logger.log(f"Ошибка при скачивании или чтении модлиста: {e}")
+        logger.error(f"Ошибка при скачивании или чтении модлиста: {e}")
         exit(1)
 
 def install_mods(mods):
     """Устанавливает моды из списка"""
-    logger.log("Начинаю установку модов...")
+    logger.info(f"Начинаю установку {len(mods)} модов...")
     
-    for mod in mods:
+    successful_installs = 0
+    failed_installs = 0
+    
+    for i, mod in enumerate(mods, 1):
         mod_name = mod.get("name")
         url = mod.get("url")
 
+        # Показываем прогресс
+        logger.progress(i - 1, len(mods), f"Подготовка: {mod_name}")
+
         if not mod_name or not url:
-            logger.log(f"Пропущен мод без имени или URL: {mod}")
+            logger.warning(f"Пропущен мод без имени или URL: {mod}")
+            failed_installs += 1
             continue
 
         zip_path = DOWNLOADS_DIR / f"{mod_name}.zip"
 
-        logger.log(f"Скачиваю: {mod_name}")
         try:
+            logger.progress(i - 1, len(mods), f"Скачиваю: {mod_name}")
             downloader.download_file(url, zip_path)
 
-            logger.log(f"Распаковываю: {mod_name}")
+            logger.progress(i - 1, len(mods), f"Распаковываю: {mod_name}")
             installer.extract_zip(zip_path, MODS_DIR / mod_name)
 
-            logger.log(f"Генерация meta.ini для: {mod_name}")
+            logger.progress(i - 1, len(mods), f"Создаю meta.ini: {mod_name}")
             installer.create_meta_ini(mod_name, MODS_DIR)
+            
+            successful_installs += 1
+            logger.progress(i, len(mods), f"✓ {mod_name}")
         except Exception as e:
-            logger.log(f"Ошибка при установке мода {mod_name}: {e}")
+            logger.error(f"Ошибка при установке мода {mod_name}: {e}")
+            failed_installs += 1
+            logger.progress(i, len(mods), f"✗ {mod_name}")
             continue
 
-    logger.log("Установка модов завершена.")
+    # Финальная статистика
+    if successful_installs > 0:
+        logger.success(f"Успешно установлено модов: {successful_installs}")
+    if failed_installs > 0:
+        logger.warning(f"Не удалось установить модов: {failed_installs}")
+    
+    logger.info("Установка модов завершена.")
 
 def sync_github_configs(github_zip_url):
     """Синхронизирует конфигурации с GitHub"""
     if not github_zip_url:
-        logger.log("GitHub URL для модпака не указан.")
+        logger.warning("GitHub URL для модпака не указан.")
         return
     
     try:
-        logger.log(f"Загружаю архив модпака: {github_zip_url}")
+        logger.info(f"Загружаю архив конфигураций с GitHub...")
         gitpack_sync.download_config_zip(github_zip_url, GITHUB_ZIP_PATH)
 
-        logger.log("Распаковываю архив модпака")
+        logger.info("Распаковываю архив конфигураций...")
         gitpack_sync.extract_config_zip(GITHUB_ZIP_PATH, GITHUB_EXTRACT_DIR)
 
-        logger.log("Применяю конфигурации из модпака")
+        logger.info("Применяю конфигурации модпака...")
         gitpack_sync.apply_configs(GITHUB_EXTRACT_DIR, OVERWRITE_DIR, PROFILES_DIR)
 
-        logger.log("Конфигурации успешно применены.")
+        logger.success("Конфигурации успешно применены!")
     except Exception as e:
-        logger.log(f"Ошибка при применении пакета с GitHub: {e}")
+        logger.error(f"Ошибка при применении пакета с GitHub: {e}")
 
 # Конфигурация путей
 BASE_DIR = Path(__file__).resolve().parent
@@ -144,7 +162,7 @@ for path in [DOWNLOADS_DIR, GITHUB_EXTRACT_DIR, MODS_DIR]:
 
 def main():
     """Основная функция программы"""
-    print("=== Asto's Modpack Installer ===")
+    logger.header("Asto's Modpack Installer")
     
     # Загрузка конфигурации
     config = load_config()
@@ -165,18 +183,18 @@ def main():
     if install_mods_enabled:
         install_mods(mods)
     else:
-        print("Установка модов пропущена по выбору пользователя.")
+        logger.info("Установка модов пропущена по выбору пользователя.")
     
     # Синхронизация конфигураций (если включено)
     if sync_configs_enabled:
         sync_github_configs(github_zip_url)
     else:
-        print("Загрузка конфигураций пропущена по выбору пользователя.")
+        logger.info("Синхронизация конфигураций пропущена по выбору пользователя.")
     
     # Очистка кэша
     installer.clean_cache(CACHE_DIR)
     
-    print("Процесс установки завершен!")
+    logger.success("Процесс установки завершен!")
 
 if __name__ == "__main__":
     main()
