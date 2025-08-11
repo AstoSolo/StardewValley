@@ -37,7 +37,7 @@ def get_user_preferences():
     print("\nНастройки установки:")
     
     while True:
-        install_mods = input("Устанавливать моды? (y/n): ").lower().strip()
+        install_mods = input("Установить моды? (Y/N): ").lower().strip()
         if install_mods in ['y', 'yes', 'д', 'да']:
             install_mods = True
             break
@@ -45,10 +45,10 @@ def get_user_preferences():
             install_mods = False
             break
         else:
-            print("Пожалуйста, введите y/n (да/нет)")
+            print("Пожалуйста, введите Y/N (да/нет)")
     
     while True:
-        sync_configs = input("Синхронизировать конфигурации с GitHub? (y/n): ").lower().strip()
+        sync_configs = input("Загрузить архив конфигов с GitHub? (Y/N): ").lower().strip()
         if sync_configs in ['y', 'yes', 'д', 'да']:
             sync_configs = True
             break
@@ -56,7 +56,7 @@ def get_user_preferences():
             sync_configs = False
             break
         else:
-            print("Пожалуйста, введите y/n (да/нет)")
+            print("Пожалуйста, введите Y/N (да/нет)")
     
     return install_mods, sync_configs
 
@@ -129,13 +129,14 @@ def sync_github_configs(github_zip_url):
 
 # Конфигурация путей
 BASE_DIR = Path(__file__).resolve().parent
+LAUNCHER_DIR = BASE_DIR.parent  # Корневая папка launcher
 DOWNLOADS_DIR = BASE_DIR / ".cache" / "downloads"
 GITHUB_ZIP_PATH = BASE_DIR / ".cache" / "github_config.zip"
 GITHUB_EXTRACT_DIR = BASE_DIR / ".cache" / "github_config"
-MODS_DIR = BASE_DIR / "mods"
+MODS_DIR = LAUNCHER_DIR / "mods"
 CACHE_DIR = BASE_DIR / ".cache"
-OVERWRITE_DIR = BASE_DIR / "overwrite"
-PROFILES_DIR = BASE_DIR / "profiles"
+OVERWRITE_DIR = LAUNCHER_DIR / "overwrite"
+PROFILES_DIR = LAUNCHER_DIR / "profiles"
 
 # Инициализация директорий
 for path in [DOWNLOADS_DIR, GITHUB_EXTRACT_DIR, MODS_DIR]:
@@ -143,7 +144,7 @@ for path in [DOWNLOADS_DIR, GITHUB_EXTRACT_DIR, MODS_DIR]:
 
 def main():
     """Основная функция программы"""
-    logger.log("=== Asto's Modpack Installer ===")
+    print("=== Asto's Modpack Installer ===")
     
     # Загрузка конфигурации
     config = load_config()
@@ -151,7 +152,6 @@ def main():
     
     # Выбор модпака
     selected_modpack = select_modpack(modpacks)
-    logger.log(f"Выбран модпак: {selected_modpack['name']}")
     
     # Получение настроек пользователя
     install_mods_enabled, sync_configs_enabled = get_user_preferences()
@@ -165,18 +165,18 @@ def main():
     if install_mods_enabled:
         install_mods(mods)
     else:
-        logger.log("Установка модов пропущена по выбору пользователя.")
+        print("Установка модов пропущена по выбору пользователя.")
     
     # Синхронизация конфигураций (если включено)
     if sync_configs_enabled:
         sync_github_configs(github_zip_url)
     else:
-        logger.log("Синхронизация конфигураций пропущена по выбору пользователя.")
+        print("Загрузка конфигураций пропущена по выбору пользователя.")
     
     # Очистка кэша
     installer.clean_cache(CACHE_DIR)
     
-    logger.log("Процесс установки завершен!")
+    print("Процесс установки завершен!")
 
 if __name__ == "__main__":
     main()

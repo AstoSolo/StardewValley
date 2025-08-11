@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
-MAX_LOG_FILES = 10  # Максимум файлов логов
+MAX_LOG_FILES = 3  # Максимум файлов логов
 
 def cleanup_old_logs():
     """Удаляет старые лог-файлы, если их больше MAX_LOG_FILES - 1 (без учета текущего)."""
