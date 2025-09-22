@@ -4,6 +4,31 @@ launcher/mods
 launcher/profiles
 launcher/overwrite
 
+# Папки и файлы ModOrganizer2
+/launcher/crashDumps
+/launcher/dlls
+/launcher/downloads
+/launcher/platforms
+/launcher/plugins
+/launcher/qml
+/launcher/resources
+/launcher/stylesheets
+/launcher/translations
+/launcher/webcache
+
+/launcher/categories.dat
+/launcher/libcrypto-3-x64.dll
+/launcher/libssl-3-x64.dll
+/launcher/ModOrganizer.exe
+/launcher/nexuscatmap.dat
+/launcher/nxmhandler.exe
+/launcher/QtWebEngineProcess.exe
+/launcher/uibase.dll
+/launcher/usvfs_proxy_x64.exe
+/launcher/usvfs_proxy_x86.exe
+/launcher/usvfs_x64.dll
+/launcher/usvfs_x86.dll
+
 # Временные файлы лаунчера
 launcher/Asto's Modpack Installer/.cashe/
 launcher/Asto's Modpack Installer/logs
