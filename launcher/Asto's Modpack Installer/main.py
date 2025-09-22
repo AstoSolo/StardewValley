@@ -1,5 +1,8 @@
 import json
+import argparse
+import sys
 from pathlib import Path
+from urllib.parse import urlparse
 from utils import downloader, installer, logger, gitpack_sync
 
 def load_config():
@@ -97,14 +100,16 @@ def install_mods(mods):
             failed_installs += 1
             continue
 
-        zip_path = DOWNLOADS_DIR / f"{mod_name}.zip"
+        # Определяем расширение из URL (поддержка .zip и .7z)
+        ext = Path(urlparse(url).path).suffix.lower() or ".zip"
+        archive_path = DOWNLOADS_DIR / f"{mod_name}{ext}"
 
         try:
             logger.progress(i - 1, len(mods), f"Скачиваю: {mod_name}")
-            downloader.download_file(url, zip_path)
+            downloader.download_file(url, archive_path)
 
             logger.progress(i - 1, len(mods), f"Распаковываю: {mod_name}")
-            installer.extract_zip(zip_path, MODS_DIR / mod_name)
+            installer.extract_archive(archive_path, MODS_DIR / mod_name)
 
             logger.progress(i - 1, len(mods), f"Создаю meta.ini: {mod_name}")
             installer.create_meta_ini(mod_name, MODS_DIR)
@@ -162,38 +167,44 @@ for path in [DOWNLOADS_DIR, GITHUB_EXTRACT_DIR, MODS_DIR]:
 
 def main():
     """Основная функция программы"""
+    parser = argparse.ArgumentParser(description="Asto's Modpack Installer")
+    parser.add_argument("--gui", action="store_true", help="Запустить графический интерфейс (PyQt6)")
+    args = parser.parse_args()
+
     logger.header("Asto's Modpack Installer")
-    
+
     # Загрузка конфигурации
     config = load_config()
     modpacks = config.get("modpacks", [])
-    
-    # Выбор модпака
+
+    if args.gui:
+        try:
+            from gui import launch_gui
+        except Exception as e:
+            logger.error(f"Не удалось загрузить GUI: {e}. Убедитесь, что установлен PyQt6 и файл gui.py присутствует.")
+            sys.exit(1)
+        # Запуск GUI и выход после закрытия окна
+        launch_gui(modpacks, BASE_DIR)
+        return
+
+    # CLI режим (по умолчанию)
     selected_modpack = select_modpack(modpacks)
-    
-    # Получение настроек пользователя
     install_mods_enabled, sync_configs_enabled = get_user_preferences()
-    
-    # Скачивание модлиста
     modlist = download_modlist(selected_modpack)
     mods = modlist.get("mods", [])
     github_zip_url = modlist.get("github_zip_url")
-    
-    # Установка модов (если включено)
+
     if install_mods_enabled:
         install_mods(mods)
     else:
         logger.info("Установка модов пропущена по выбору пользователя.")
-    
-    # Синхронизация конфигураций (если включено)
+
     if sync_configs_enabled:
         sync_github_configs(github_zip_url)
     else:
         logger.info("Синхронизация конфигураций пропущена по выбору пользователя.")
-    
-    # Очистка кэша
+
     installer.clean_cache(CACHE_DIR)
-    
     logger.success("Процесс установки завершен!")
 
 if __name__ == "__main__":
