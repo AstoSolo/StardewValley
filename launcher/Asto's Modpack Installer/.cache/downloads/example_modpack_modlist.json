@@ -1,0 +1,18 @@
+{
+  "name": "exampleModpack",
+  "github_zip_url": "https://github.com/AstoSolo/StardewValleyOld/releases/download/test/example_modpack.zip",
+  "mods": [
+    {
+      "name": "ContentPatcher",
+      "url": "https://stardewmods.ru/uploads/public_files/2025-07/contentpatcher.zip"
+    },
+    {
+      "name": "FarmTypeManager",
+      "url": "https://stardewmods.ru/uploads/public_files/2025-07/farmtypemanager.7z"
+    },
+    {
+      "name": "Generic Mod Config Menu",
+      "url": "https://stardewmods.ru/uploads/public_files/2025-07/gmcm.zip"
+    }
+  ]
+}
